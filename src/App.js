@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles.css";
+import React from "react-dom";
+import { useState } from "react";
+import Form from "./form";
+import List from "./list";
+import { Route, Redirect } from "react-router-dom";
+import Home from "./Home";
 
-function App() {
+export default function App() {
+  const [todoList, setTodoList] = useState([]);
+
+  const removeTodo = (index) => {
+    setTodoList(todoList.filter((todo, i) => i !== index));
+  };
+
+  const validateForm = (errand) => {
+    if (errand) {
+      setTodoList([...todoList, errand]);
+    }
+    console.log("app - validationform - errand", errand);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Route exact path="/" component={Home} />
+
+      <Route exact path="/form">
+        <Form validateForm={validateForm} />
+      </Route>
+      <Route exact path="/form">
+        <List todoList={todoList} removeTodo={removeTodo} />
+      </Route>
+      <Redirect to="/" />
     </div>
   );
 }
-
-export default App;
